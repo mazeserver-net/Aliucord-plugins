@@ -64,6 +64,7 @@ public final class BetterCodeBlocks extends Plugin {
             }
         }));
 
+
         patcher.patch(MDUtils.class.getDeclaredMethod("renderCodeBlock", Context.class, SpannableStringBuilder.class, String.class, String.class),
             new PreHook(param -> {
                 var lang = (String) param.args[2];
