@@ -32,7 +32,7 @@ public final class LangNode<RC extends BasicRenderContext> extends Node.a<RC> {
     }
 
     public static void renderLang(SpannableStringBuilder builder, Context ctx, String lang, int a) {
-        builder.append(lang).append("\n");
+        //builder.append(lang).append("\n");
         builder.setSpan(new RelativeSizeSpan(0.85f), a, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         Utils.fixColor(builder, ctx, a);
     }
