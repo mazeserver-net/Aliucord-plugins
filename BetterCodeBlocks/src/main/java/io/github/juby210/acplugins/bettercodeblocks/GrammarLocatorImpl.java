@@ -106,8 +106,6 @@ public final class GrammarLocatorImpl implements GrammarLocator {
                 return Prism_python.create(prism4j);
             case "scala":
                 return Prism_scala.create(prism4j);
-            case "sql":
-                return Prism_sql.create(prism4j);
             case "swift":
                 return Prism_swift.create(prism4j);
             case "yaml":
