@@ -68,15 +68,16 @@ public final class BetterCodeBlocks extends Plugin {
         patcher.patch(MDUtils.class.getDeclaredMethod("renderCodeBlock", Context.class, SpannableStringBuilder.class, String.class, String.class),
             new PreHook(param -> {
                 var lang = (String) param.args[2];
-                //if (!Settings.Companion.get(settings, lang)) return;
+                if (!Settings.Companion.get(settings, lang)) return;
 
-                var builder = (SpannableStringBuilder) param.args[1];
+                /*var builder = (SpannableStringBuilder) param.args[1];
                 int a = builder.length();
                 var rendered = render(lang, (String) param.args[3]);
                 var ctx = (Context) param.args[0];
                 wrapInNodes(lang, rendered).render(builder, new MDUtils.RenderContext(ctx));
                 if (rendered instanceof String) Utils.fixColor(builder, ctx, a);
                 param.setResult(builder);
+                */
             })
         );
     }
