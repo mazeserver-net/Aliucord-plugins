@@ -41,6 +41,19 @@ public abstract class Prism4jThemeBase implements Prism4jTheme {
     protected static int applyAlpha(@FloatRange(from = .0F, to = 1.F) float alpha, @ColorInt int color) {
         return applyAlpha((int) (255 * alpha + .5F), color);
     }
+    
+    
+    @ColorInt
+    protected static int backapplyAlpha(@IntRange(from = 0, to = 255) int alpha, @ColorInt int color) {
+        return (color & 0x00FFFFFF) | (alpha << 24);
+    }
+
+    @ColorInt
+    protected static int backapplyAlpha(@FloatRange(from = .0F, to = 1.F) float alpha, @ColorInt int color) {
+        return backapplyAlpha((int) (255 * alpha + .5F), color);
+    }
+    
+    
 
     protected static boolean isOfType(@NonNull String expected, @NonNull String type, @Nullable String alias) {
         return expected.equals(type) || expected.equals(alias);
@@ -68,6 +81,33 @@ public abstract class Prism4jThemeBase implements Prism4jTheme {
                 ? color.color
                 : 0;
     }
+    
+    
+    private final BackColorHashMap backcolorHashMap;
+
+    protected BackPrism4jThemeBase() {
+        this.backcolorHashMap = init();
+    }
+
+    @NonNull
+    protected abstract BackColorHashMap init();
+
+    @ColorInt
+    protected int backcolor(@NonNull String language, @NonNull String type, @Nullable String alias) {
+
+        Color color = backcolorHashMap.get(type);
+        if (color == null
+                && alias != null) {
+            color = backcolorHashMap.get(alias);
+        }
+
+        return color != null
+                ? color.color
+                : 0;
+    }
+    
+    
+    
 
     @Override
     public void apply(
@@ -85,6 +125,26 @@ public abstract class Prism4jThemeBase implements Prism4jTheme {
             applyColor(language, type, alias, color, builder, start, end);
         }
     }
+    
+    
+    @Override
+    public void backapply(
+            @NonNull String language,
+            @NonNull Prism4j.Syntax syntax,
+            @NonNull SpannableStringBuilder builder,
+            int start,
+            int end) {
+
+        final String type = syntax.type();
+        final String alias = syntax.alias();
+
+        final int color = color(language, type, alias);
+        if (color != 0) {
+            backapplyColor(language, type, alias, color, builder, start, end);
+        }
+    }
+    
+    
 
     @SuppressWarnings("unused")
     protected void applyColor(
@@ -97,6 +157,21 @@ public abstract class Prism4jThemeBase implements Prism4jTheme {
             int end) {
         builder.setSpan(new ForegroundColorSpan(color), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
+    
+    
+    @SuppressWarnings("unused")
+    protected void backapplyColor(
+            @NonNull String language,
+            @NonNull String type,
+            @Nullable String alias,
+            @ColorInt int color,
+            @NonNull SpannableStringBuilder builder,
+            int start,
+            int end) {
+        builder.setSpan(new ForegroundColorSpan(color), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+    }
+    
+    
 
     protected static class Color {
 
@@ -154,4 +229,48 @@ public abstract class Prism4jThemeBase implements Prism4jTheme {
             return this;
         }
     }
+    
+    
+    public static class BackColorHashMap extends HashMap<String, Color> {
+
+        @NonNull
+        public BackColorHashMap add(@ColorInt int color, String name) {
+            put(name, Color.of(color));
+            return this;
+        }
+
+        @NonNull
+        public BackColorHashMap add(
+                @ColorInt int color,
+                @NonNull String name1,
+                @NonNull String name2) {
+            final Color c = Color.of(color);
+            put(name1, c);
+            put(name2, c);
+            return this;
+        }
+
+        @NonNull
+        public BackColorHashMap add(
+                @ColorInt int color,
+                @NonNull String name1,
+                @NonNull String name2,
+                @NonNull String name3) {
+            final Color c = Color.of(color);
+            put(name1, c);
+            put(name2, c);
+            put(name3, c);
+            return this;
+        }
+
+        @NonNull
+        public BackColorHashMap add(@ColorInt int color, String... names) {
+            final Color c = Color.of(color);
+            for (String name : names) {
+                put(name, c);
+            }
+            return this;
+        }
+    }
+    
 }
