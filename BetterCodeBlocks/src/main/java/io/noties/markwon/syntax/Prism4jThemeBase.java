@@ -85,7 +85,7 @@ public abstract class Prism4jThemeBase implements Prism4jTheme {
     
     private final BackColorHashMap backcolorHashMap;
 
-    protected BackPrism4jThemeBase() {
+    protected Prism4jThemeBase() {
         this.backcolorHashMap = init();
     }
 
