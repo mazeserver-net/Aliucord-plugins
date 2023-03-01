@@ -47,13 +47,6 @@ public class Prism4jThemeDarkula extends Prism4jThemeBase {
             .add(0xFF484a4a, "deleted");
     }
     
-    @NonNull
-    @Override
-    protected BackColorHashMap init() {
-        return new BackColorHashMap()
-            .add(0xFF294436, "inserted")
-            .add(0xFF484a4a, "deleted");
-    }
     
     @Override
     protected void applyColor(@NonNull String language, @NonNull String type, @Nullable String alias, int color, @NonNull SpannableStringBuilder builder, int start, int end) {
